@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caitlin — Software & Network Engineer</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f7f7f5;
+    --bg-tertiary: #f1efe8;
+    --text-primary: #1a1a1a;
+    --text-secondary: #666660;
+    --text-tertiary: #999992;
+    --border: rgba(0,0,0,0.12);
+    --border-hover: rgba(0,0,0,0.25);
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a;
+      --bg-secondary: #242424;
+      --bg-tertiary: #2c2c2a;
+      --text-primary: #f0ede8;
+      --text-secondary: #a8a8a0;
+      --text-tertiary: #6a6a64;
+      --border: rgba(255,255,255,0.1);
+      --border-hover: rgba(255,255,255,0.25);
+    }
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    border-bottom: 0.5px solid var(--border);
+    z-index: 50;
+    padding: 0 2rem;
+  }
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 56px;
+  }
+  .nav-name { font-size: 15px; font-weight: 500; color: var(--text-primary); text-decoration: none; }
+  .nav-links { display: flex; gap: 24px; list-style: none; }
+  .nav-links a { font-size: 13px; color: var(--text-secondary); text-decoration: none; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--text-primary); }
+
+  /* HERO */
+  .hero {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 5rem 2rem 4rem;
+  }
+  .hero-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #085041;
+    background: #E1F5EE;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 1.25rem;
+  }
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 500;
+    line-height: 1.15;
+    color: var(--text-primary);
+    margin-bottom: 1.25rem;
+    max-width: 700px;
+  }
+  .hero p {
+    font-size: 16px;
+    color: var(--text-secondary);
+    max-width: 560px;
+    line-height: 1.75;
+    margin-bottom: 2rem;
+  }
+  .hero-links { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 18px;
+    border-radius: var(--radius-md);
+    border: 0.5px solid var(--border-hover);
+    background: transparent;
+    color: var(--text-primary);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .btn:hover { background: var(--bg-secondary); }
+  .btn-primary {
+    background: var(--text-primary);
+    color: var(--bg);
+    border-color: var(--text-primary);
+  }
+  .btn-primary:hover { opacity: 0.85; background: var(--text-primary); }
+
+  /* SKILLS STRIP */
+  .skills-strip {
+    border-top: 0.5px solid var(--border);
+    border-bottom: 0.5px solid var(--border);
+    padding: 1rem 2rem;
+    margin-bottom: 0;
+  }
+  .skills-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .skills-label { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.08em; margin-right: 8px; }
+  .skill-pill {
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 0.5px solid var(--border);
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+  }
+
+  /* PROJECTS */
+  .projects-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+  }
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.5rem;
+  }
+  .section-title {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+  .project-count { font-size: 11px; color: var(--text-tertiary); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  @media (max-width: 640px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  /* PROJECT CARD */
+  .card {
+    background: var(--bg);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.15s;
+    display: flex;
+    flex-direction: column;
+  }
+  .card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+
+  .card-thumb {
+    width: 100%;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Image or video placed here will fill the thumb area */
+  .card-thumb img,
+  .card-thumb video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+  }
+  .card-thumb-emoji {
+    font-size: 36px;
+    position: relative;
+    z-index: 1;
+  }
+  .card-tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 20px;
+    letter-spacing: 0.03em;
+  }
+  .card-body { padding: 14px 16px 16px; flex: 1; display: flex; flex-direction: column; }
+  .card-title { font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: 5px; }
+  .card-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 12px; flex: 1; }
+  .card-stack { display: flex; flex-wrap: wrap; gap: 4px; }
+  .pill {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    border: 0.5px solid var(--border);
+    color: var(--text-tertiary);
+    background: var(--bg-secondary);
+  }
+
+  /* MODAL OVERLAY */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    padding: 2rem 1rem;
+    overflow-y: auto;
+  }
+  .modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+  .modal {
+    background: var(--bg);
+    border-radius: var(--radius-xl);
+    border: 0.5px solid var(--border);
+    width: 100%;
+    max-width: 560px;
+    overflow: hidden;
+    margin: auto;
+  }
+  .modal-thumb {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .modal-thumb img,
+  .modal-thumb video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+  }
+  .modal-thumb-emoji { font-size: 56px; position: relative; z-index: 1; }
+  .modal-tag {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 2;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 11px;
+    border-radius: 20px;
+  }
+  .modal-body { padding: 1.5rem; }
+  .modal-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+  .modal-title { font-size: 20px; font-weight: 500; color: var(--text-primary); }
+  .modal-close {
+    background: var(--bg-secondary);
+    border: 0.5px solid var(--border);
+    border-radius: 50%;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+  .modal-type { font-size: 12px; color: var(--text-tertiary); margin-bottom: 1rem; }
+  .modal-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.75; margin-bottom: 1.25rem; }
+  .modal-section-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 8px;
+  }
+  .modal-stack { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.25rem; }
+  .modal-pill {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 0.5px solid var(--border);
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+  }
+  .modal-btns { display: flex; gap: 8px; }
+  .modal-btn {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 7px 16px;
+    border-radius: var(--radius-md);
+    border: 0.5px solid var(--border-hover);
+    background: transparent;
+    color: var(--text-primary);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .modal-btn:hover { background: var(--bg-secondary); }
+
+  /* ABOUT & CONTACT */
+  .about-section {
+    border-top: 0.5px solid var(--border);
+    padding: 4rem 2rem;
+  }
+  .about-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+  @media (max-width: 640px) { .about-inner { grid-template-columns: 1fr; gap: 2rem; } }
+  .about-inner h2 { font-size: 18px; font-weight: 500; margin-bottom: 1rem; }
+  .about-inner p { font-size: 14px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 0.75rem; }
+  .contact-links { display: flex; flex-direction: column; gap: 10px; margin-top: 0.5rem; }
+  .contact-link {
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.15s;
+  }
+  .contact-link:hover { color: var(--text-primary); }
+
+  footer {
+    border-top: 0.5px solid var(--border);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-tertiary);
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-name" href="#">Caitlin</a>
+    <ul class="nav-links">
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="hero-tag">Software &amp; Network Engineer</span>
+  <h1>Building software that solves real problems</h1>
+  <p>I'm a software and network engineering student with a passion for multidisciplinary teams and meaningful impact. I thrive on projects that sit just outside my comfort zone — because that's where the best learning happens.</p>
+  <div class="hero-links">
+    <a href="#projects" class="btn btn-primary">View projects</a>
+    <a href="https://github.com/" class="btn" target="_blank">GitHub</a>
+    <a href="https://linkedin.com/" class="btn" target="_blank">LinkedIn</a>
+  </div>
+</section>
+
+<!-- SKILLS STRIP -->
+<div class="skills-strip">
+  <div class="skills-inner">
+    <span class="skills-label">Stack</span>
+    <span class="skill-pill">Python</span>
+    <span class="skill-pill">Swift / iOS</span>
+    <span class="skill-pill">TypeScript</span>
+    <span class="skill-pill">C / C++</span>
+    <span class="skill-pill">C#</span>
+    <span class="skill-pill">React</span>
+    <span class="skill-pill">FastAPI</span>
+    <span class="skill-pill">Azure</span>
+    <span class="skill-pill">Docker</span>
+    <span class="skill-pill">OpenCV</span>
+    <span class="skill-pill">TCP/IP</span>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<section class="projects-section" id="projects">
+  <div class="section-header">
+    <span class="section-title">Projects</span>
+    <span class="project-count" id="proj-count"></span>
+  </div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<!-- ABOUT & CONTACT -->
+<section class="about-section" id="about">
+  <div class="about-inner">
+    <div>
+      <h2>About me</h2>
+      <p>I'm a software and network engineering student driven by the moment an idea becomes something real. I thrive in multidisciplinary teams where different perspectives push a project further than any one person could alone.</p>
+      <p>I actively seek out challenges that sit just outside my comfort zone, because that's where the best learning happens. My work spans mobile, AI, cloud, networking, and systems — and I'm most energised when the things I build solve problems that genuinely matter to people.</p>
+    </div>
+    <div id="contact">
+      <h2>Get in touch</h2>
+      <p>Open to internships, graduate roles, and collaborative projects. Feel free to reach out.</p>
+      <div class="contact-links">
+        <a class="contact-link" href="mailto:your@email.com">✉ your@email.com</a>
+        <a class="contact-link" href="https://linkedin.com/" target="_blank">in LinkedIn</a>
+        <a class="contact-link" href="https://github.com/" target="_blank">⌥ GitHub</a>
+        <a class="contact-link" href="your-resume.pdf" target="_blank">↓ Download resume</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Built by Caitlin — 2025</p>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal">
+    <div class="modal-thumb" id="modal-thumb">
+      <span class="modal-thumb-emoji" id="modal-emoji"></span>
+      <span class="modal-tag" id="modal-tag"></span>
+    </div>
+    <div class="modal-body">
+      <div class="modal-top">
+        <div>
+          <p class="modal-title" id="modal-title"></p>
+          <p class="modal-type" id="modal-type"></p>
+        </div>
+        <button class="modal-close" id="modal-close">✕</button>
+      </div>
+      <p class="modal-desc" id="modal-desc"></p>
+      <div class="modal-section-label">Tech stack</div>
+      <div class="modal-stack" id="modal-stack"></div>
+      <div class="modal-btns">
+        <a class="modal-btn" id="modal-github" href="#" target="_blank">View on GitHub</a>
+        <a class="modal-btn" id="modal-demo" href="#" target="_blank">Live demo</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const projects = [
+  {
+    emoji: "🏥",
+    bg: "#E1F5EE",
+    tagText: "iOS",
+    tagBg: "#9FE1CB",
+    tagColor: "#085041",
+    title: "Women's Health App",
+    type: "Mobile · Social impact · Swift",
+    short: "Finds cheapest GPs, specialists and free health products near you.",
+    desc: "Built during the Apple Foundation Program, this iOS app helps women find the most affordable healthcare options nearby — filtering GPs, specialists, and free women's health product locations in real time. Designed with accessibility and real-world impact at its core.",
+    stack: ["Swift", "SwiftUI", "CoreLocation", "MapKit", "Xcode"],
+    github: "https://github.com/",
+    demo: "#",
+    image: ""
+  },
+  {
+    emoji: "✋",
+    bg: "#EEEDFE",
+    tagText: "CV / ML",
+    tagBg: "#CECBF6",
+    tagColor: "#3C3489",
+    title: "GestureCanvas",
+    type: "Computer vision · Python",
+    short: "Draw in the air using hand gestures detected by your webcam.",
+    desc: "A real-time computer vision application that uses hand landmark detection to let users draw on screen using only finger gestures — no mouse or stylus required. The number of fingers raised determines the drawing colour, and an open palm activates the eraser.",
+    stack: ["Python", "OpenCV", "MediaPipe", "cvzone", "NumPy"],
+    github: "https://github.com/",
+    demo: "#",
+    image: ""
+  },
+  {
+    emoji: "🤖",
+    bg: "#FAECE7",
+    tagText: "AI / RAG",
+    tagBg: "#F5C4B3",
+    tagColor: "#4A1B0C",
+    title: "HealthClarity",
+    type: "Full stack · AI · Python · React",
+    short: "Upload a medical document and ask questions in plain English.",
+    desc: "A RAG-powered web application where patients upload medical letters, pathology results, or GP notes and ask questions in plain English. Uses vector search to retrieve relevant sections and GPT-4 to explain them clearly — making complex medical language accessible to everyone.",
+    stack: ["Python", "FastAPI", "OpenAI", "LangChain", "React", "TypeScript", "Azure"],
+    github: "https://github.com/",
+    demo: "#",
+    image: ""
+  },
+  {
+    emoji: "🌐",
+    bg: "#E6F1FB",
+    tagText: "Networking",
+    tagBg: "#B5D4F4",
+    tagColor: "#042C53",
+    title: "Network Traffic Analyser",
+    type: "Systems · Networking · Python",
+    short: "Captures and visualises live network traffic on your machine.",
+    desc: "Captures packets on the local network and displays a real-time dashboard showing connected hosts, protocols used, and bandwidth over time. Built from scratch using raw socket programming to demonstrate deep TCP/IP knowledge.",
+    stack: ["Python", "Scapy", "React", "TypeScript", "WebSockets"],
+    github: "https://github.com/",
+    demo: "#",
+    image: ""
+  },
+  {
+    emoji: "⚙️",
+    bg: "#F1EFE8",
+    tagText: "OS / Systems",
+    tagBg: "#D3D1C7",
+    tagColor: "#2C2C2A",
+    title: "CPU Scheduler Simulator",
+    type: "Operating systems · Python · React",
+    short: "Visualises classic CPU scheduling algorithms with animated timelines.",
+    desc: "Simulates Round Robin, Priority, First Come First Served, and Shortest Job First scheduling algorithms with an animated Gantt chart showing which process runs when, along with wait times and turnaround stats. Built to demonstrate deep OS fundamentals.",
+    stack: ["Python", "FastAPI", "React", "TypeScript"],
+    github: "https://github.com/",
+    demo: "#",
+    image: ""
+  },
+  {
+    emoji: "🔒",
+    bg: "#FBEAF0",
+    tagText: "Cybersecurity",
+    tagBg: "#F4C0D1",
+    tagColor: "#4B1528",
+    title: "Port Scanner",
+    type: "Cybersecurity · Python · Networking",
+    short: "Scans a target IP for open ports and identifies running services.",
+    desc: "A Python-based network port scanner built from scratch — similar to nmap — that probes a target IP address for open TCP ports, identifies the services running on them, and presents results in a clean CLI interface. Demonstrates applied TCP/IP knowledge.",
+    stack: ["Python", "Sockets", "TCP/IP", "Threading"],
+    github: "https://github.com/",
+    demo: "#",
+    image: ""
+  },
+  {
+    emoji: "🌡️",
+    bg: "#FAEEDA",
+    tagText: "IoT / Cloud",
+    tagBg: "#FAC775",
+    tagColor: "#412402",
+    title: "IoT Sensor Dashboard",
+    type: "Embedded systems · IoT · Cloud",
+    short: "Raspberry Pi sensor data pushed to the cloud and visualised live.",
+    desc: "A Raspberry Pi reads temperature and humidity data from a sensor every few seconds and pushes it to a cloud database. A React web dashboard displays live readings, historical trends, and alerts when values go out of range — demonstrating full IoT pipeline from hardware to UI.",
+    stack: ["Python", "Raspberry Pi", "Azure IoT Hub", "React", "TypeScript"],
+    github: "https://github.com/",
+    demo: "#",
+    image: ""
+  },
+  {
+    emoji: "🎮",
+    bg: "#EAF3DE",
+    tagText: "C / C++",
+    tagBg: "#C0DD97",
+    tagColor: "#173404",
+    title: "C Game",
+    type: "Systems programming · C / C++",
+    short: "A game built in C — showing low-level systems programming skills.",
+    desc: "A game written in C that demonstrates low-level systems programming — manual memory management, efficient data structures, and direct hardware interaction without the safety nets of higher-level languages. Update this description with your specific game details.",
+    stack: ["C", "C++"],
+    github: "https://github.com/",
+    demo: "#",
+    image: ""
+  }
+];
+
+document.getElementById('proj-count').textContent = projects.length + ' projects';
+
+const grid = document.getElementById('grid');
+projects.forEach((p) => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="card-thumb" style="background: ${p.bg}">
+      ${p.image ? `<img src="${p.image}" alt="${p.title}">` : ''}
+      <span class="card-thumb-emoji">${p.emoji}</span>
+      <span class="card-tag" style="background: ${p.tagBg}; color: ${p.tagColor}">${p.tagText}</span>
+    </div>
+    <div class="card-body">
+      <p class="card-title">${p.title}</p>
+      <p class="card-desc">${p.short}</p>
+      <div class="card-stack">
+        ${p.stack.slice(0,3).map(s => `<span class="pill">${s}</span>`).join('')}
+        ${p.stack.length > 3 ? `<span class="pill">+${p.stack.length - 3} more</span>` : ''}
+      </div>
+    </div>
+  `;
+  card.addEventListener('click', () => openModal(p));
+  grid.appendChild(card);
+});
+
+function openModal(p) {
+  const thumb = document.getElementById('modal-thumb');
+  thumb.style.background = p.bg;
+  if (p.image) {
+    thumb.innerHTML = `<img src="${p.image}" alt="${p.title}"><span class="modal-tag" style="background:${p.tagBg};color:${p.tagColor}">${p.tagText}</span>`;
+  } else {
+    thumb.innerHTML = `<span class="modal-thumb-emoji">${p.emoji}</span><span class="modal-tag" style="background:${p.tagBg};color:${p.tagColor}">${p.tagText}</span>`;
+  }
+  document.getElementById('modal-title').textContent = p.title;
+  document.getElementById('modal-type').textContent = p.type;
+  document.getElementById('modal-desc').textContent = p.desc;
+  document.getElementById('modal-stack').innerHTML = p.stack.map(s => `<span class="modal-pill">${s}</span>`).join('');
+  document.getElementById('modal-github').href = p.github;
+  document.getElementById('modal-demo').href = p.demo;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+document.getElementById('modal-close').addEventListener('click', closeModal);
+document.getElementById('modal-overlay').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+</script>
+</body>
+</html>
