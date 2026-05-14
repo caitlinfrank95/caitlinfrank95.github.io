@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Peachjé — Caitlin Frank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0a0a; --surface: #111111; --border: #222222;
+    --text: #e8e4dc; --muted: #666666; --accent: #c8b89a;
+    --serif: 'DM Serif Display', Georgia, serif;
+    --mono: 'DM Mono', 'Courier New', monospace;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--mono); font-size: 14px; line-height: 1.6; min-height: 100vh; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; background: rgba(10,10,10,0.95); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
+  .nav-name { font-family: var(--serif); font-size: 1.1rem; color: var(--text); text-decoration: none; }
+  .nav-back { display: flex; align-items: center; gap: 0.5rem; color: var(--muted); text-decoration: none; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-back:hover { color: var(--text); }
+  .nav-back::before { content: "←"; font-size: 16px; }
+  .project-hero { padding: 10rem 3rem 5rem; border-bottom: 1px solid var(--border); }
+  .project-meta { display: flex; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .meta-item { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .meta-item strong { display: block; color: var(--accent); margin-bottom: 0.25rem; }
+  .project-title { font-family: var(--serif); font-size: clamp(3rem, 8vw, 7rem); font-weight: 400; letter-spacing: -0.03em; line-height: 1.0; margin-bottom: 2rem; }
+  .project-tagline { font-size: 15px; color: var(--muted); max-width: 600px; line-height: 1.8; }
+  .project-cover { width: 100%; aspect-ratio: 16/7; background: var(--surface); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .project-body { display: grid; grid-template-columns: 1fr 2fr; gap: 6rem; padding: 6rem 3rem; border-bottom: 1px solid var(--border); }
+  .sidebar { position: sticky; top: 6rem; height: fit-content; }
+  .sidebar-section { margin-bottom: 3rem; }
+  .sidebar-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); }
+  .sidebar-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { padding: 5px 12px; border: 1px solid var(--border); font-size: 11px; letter-spacing: 0.08em; color: var(--muted); }
+  .sidebar-link { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1rem; border: 1px solid var(--border); text-decoration: none; color: var(--text); font-size: 12px; letter-spacing: 0.08em; margin-bottom: 0.5rem; transition: border-color 0.2s, background 0.2s; }
+  .sidebar-link:hover { border-color: var(--accent); background: rgba(200,184,154,0.04); }
+  .sidebar-link span { color: var(--muted); }
+  .project-content h2 { font-family: var(--serif); font-size: 2rem; font-weight: 400; margin: 3rem 0 1rem; color: var(--text); letter-spacing: -0.01em; }
+  .project-content h2:first-child { margin-top: 0; }
+  .project-content p { color: var(--muted); line-height: 1.9; font-size: 14px; margin-bottom: 1.25rem; }
+  .project-content ul { list-style: none; margin-bottom: 1.25rem; }
+  .project-content ul li { color: var(--muted); font-size: 14px; line-height: 1.8; padding-left: 1.5rem; position: relative; margin-bottom: 0.4rem; }
+  .project-content ul li::before { content: "—"; position: absolute; left: 0; color: var(--accent); }
+  .project-gallery { padding: 5rem 3rem; border-bottom: 1px solid var(--border); }
+  .gallery-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 2rem; }
+  .next-project { padding: 5rem 3rem; display: flex; align-items: center; justify-content: space-between; text-decoration: none; color: var(--text); border-bottom: 1px solid var(--border); transition: background 0.3s; }
+  .next-project:hover { background: var(--surface); }
+  .next-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; }
+  .next-title { font-family: var(--serif); font-size: 2.5rem; font-weight: 400; letter-spacing: -0.02em; }
+  .next-arrow { font-size: 3rem; color: var(--accent); }
+  footer { padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; font-size: 11px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .project-hero { padding: 8rem 1.5rem 3rem; }
+    .project-body { grid-template-columns: 1fr; gap: 3rem; padding: 3rem 1.5rem; }
+    .sidebar { position: static; }
+    .project-gallery { padding: 3rem 1.5rem; }
+    .next-project { padding: 3rem 1.5rem; }
+    footer { flex-direction: column; gap: 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-name">Caitlin Frank</a>
+  <a href="index.html" class="nav-back">All Projects</a>
+</nav>
+
+<div class="project-hero">
+  <div class="project-meta">
+    <div class="meta-item"><strong>Category</strong>Mobile App</div>
+    <div class="meta-item"><strong>Year</strong>2026</div>
+    <div class="meta-item"><strong>Team</strong>3 people</div>
+    <div class="meta-item"><strong>Timeline</strong>3 weeks</div>
+    <div class="meta-item"><strong>Type</strong>Apple Foundation Program</div>
+  </div>
+  <h1 class="project-title">Peach&#233;</h1>
+  <p class="project-tagline">A project I made during my time in the Apple Foundation Program. A women's health app designed to help Melbourne users find bulk-billing clinics, GPs, and health services nearby.</p>
+</div>
+
+<div class="project-cover" style="background:#1a1008; gap:0; justify-content:flex-start; position:relative;">
+  <video src="PeacheVideo.mov" autoplay muted loop playsinline
+    style="height:100%; width:auto; object-fit:cover; flex-shrink:0;"></video>
+  <img src="PeacheHappyFlow.jpg" alt="Peache app mockup"
+    style="flex:1; height:100%; object-fit:cover; object-position:center;">
+  <div style="position:absolute; bottom:1.5rem; right:1.5rem; background:rgba(0,0,0,0.55); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:10px 14px; display:flex; align-items:center; gap:10px;">
+    <img src="AppleFoundationLogo.png" alt="Apple Foundation Program" style="height:32px; width:auto; display:block;">
+    <span style="font-size:11px; letter-spacing:0.08em; color:rgba(232,228,220,0.85); white-space:nowrap;">Apple Foundation Program</span>
+  </div>
+</div>
+
+<div class="project-body">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <p class="sidebar-label">Skills Used</p>
+      <div class="sidebar-tags">
+        <span class="tag">SwiftUI</span>
+        <span class="tag">Xcode</span>
+        <span class="tag">iOS Development</span>
+        <span class="tag">UI/UX Design</span>
+        <span class="tag">Figma</span>
+        <span class="tag">Data Curation</span>
+        <span class="tag">MapKit</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <p class="sidebar-label">Links</p>
+      <a href="https://github.com/yourusername/project-one" target="_blank" class="sidebar-link">GitHub Repo <span>&#8599;</span></a>
+      <a href="#" class="sidebar-link">Live Demo <span>&#8599;</span></a>
+      <a href="PeachesAppFINAL.pdf" target="_blank" class="sidebar-link">View Presentation <span>&#8599;</span></a>
+    </div>
+  </aside>
+
+  <div class="project-content">
+    <h2>Overview</h2>
+    <p>Peach&#233; is a women's health app designed to help users find healthcare they can both afford and trust. The app lets users search for GPs, specialists, breast screenings, free STI screenings, and free hygiene product providers &#8212; filtered by cost, location, and specialty &#8212; so that financial and logistical barriers no longer stand between women and the care they need.</p>
+    <p>Peach&#233; was built as part of the <strong>Apple Foundation Program 2026</strong> &#8212; a competitive three-week program run by Apple. The process was far more than just coding: the first two weeks were spent conceiving the idea, pitching and refining the concept for Apple's approval, conducting user research, and designing the full interface in Figma. Only once the concept and design were signed off did we move into development &#8212; which I completed solo in three days using SwiftUI and Xcode.</p>
+    <p>I was responsible for both the UI/UX design and the entire codebase across a multidisciplinary team of three. At the end of the program, I presented Peach&#233; live to an <strong>Apple panel</strong> and was awarded a <strong>Certificate of Completion</strong> from the Apple Foundation Program.</p>
+
+    <h2>The Process</h2>
+    <ul>
+      <li><strong>Week 1 &#8212; Concept &amp; approval</strong> &#8212; ideated, scoped, and pitched the app concept to Apple for sign-off, refining the problem space and target user through multiple rounds of feedback</li>
+      <li><strong>Week 2 &#8212; Research &amp; design</strong> &#8212; conducted user research to validate the need, then designed the full app interface in Figma including user flows, visual identity, and component system</li>
+      <li><strong>Week 3 &#8212; Development</strong> &#8212; built the entire working iOS app independently in SwiftUI over three days, bringing the approved design to life as a functional happy path prototype</li>
+      <li><strong>Final presentation</strong> &#8212; presented the concept, design decisions, and live app to an Apple panel</li>
+    </ul>
+
+    <h2>What I Built</h2>
+    <ul>
+      <li><strong>Search &amp; discovery</strong> &#8212; users search by specialty or service type, returning filtered results from a curated local dataset covering GPs, specialists, screenings, and hygiene access points</li>
+      <li><strong>Interactive map view</strong> &#8212; an embedded map lets users visually explore nearby providers and see consultation cost tiers at a glance</li>
+      <li><strong>Care Team feature</strong> &#8212; a favouriting system that lets users save and build a personalised list of trusted providers</li>
+      <li><strong>Cost transparency</strong> &#8212; every listing clearly displays bulk-billing status and consultation fees, removing the guesswork around affordability</li>
+      <li><strong>Curated dataset</strong> &#8212; manually compiled health provider data across three Melbourne postcodes, structured to support the full search and filter experience</li>
+    </ul>
+
+    <h2>Scope &amp; Constraints</h2>
+    <p>The final build is a happy path prototype &#8212; a deliberate, focused choice given that the coding phase was just three days. The dataset was manually sourced and scoped to three specific Melbourne postcodes, covering enough real providers to make the experience feel genuine without overextending the timeline.</p>
+    <p>The real constraint wasn't the code &#8212; it was the full journey that came before it. Getting an idea approved by Apple, validating it through research, designing a complete UI system, and then building a working app across three weeks as a student is a different kind of challenge to a standard project. Every decision had to be justified, refined, and signed off before we could move to the next stage.</p>
+
+    <h2>What I Learned</h2>
+    <p>This project taught me that if you focus, you have the capacity to learn almost anything. In three weeks I went from no SwiftUI knowledge to a working iOS app &#8212; not because it was easy, but because the goal was clear and the motivation was real. That realisation has stayed with me: the discipline doesn't matter as much as the drive.</p>
+    <p>Working in a multidisciplinary team also showed me how much faster and further you go when everyone brings a different lens. Sitting alongside people who think about problems differently &#8212; whether through design, research, or strategy &#8212; made the final product something none of us could have built alone.</p>
+    <ul>
+      <li><strong>SwiftUI &amp; Xcode</strong> &#8212; built my first iOS app end-to-end in a brand new framework under real time pressure</li>
+      <li><strong>UI/UX design</strong> &#8212; designed the full interface from user flows through to a polished visual system in Figma</li>
+      <li><strong>Data sourcing &amp; structure</strong> &#8212; manually compiled and structured a real health provider dataset across three Melbourne postcodes</li>
+      <li><strong>Multidisciplinary collaboration</strong> &#8212; learned how much you gain by working with people from entirely different disciplines and backgrounds</li>
+      <li><strong>Pitching to stakeholders</strong> &#8212; presented live to an Apple panel, translating technical and design decisions into a confident, clear story</li>
+    </ul>
+  </div>
+</div>
+
+<div class="project-gallery">
+  <p class="gallery-label">Apple Presentation &#8212; the deck I presented to the Apple panel at the end of the program</p>
+  <div style="display:flex; flex-direction:column; gap:2px;">
+    <img src="PeacheSlide1.jpg" alt="Slide 1" style="width:100%; height:auto; display:block;">
+    <img src="PeacheSlide2.jpg" alt="Slide 2" style="width:100%; height:auto; display:block;">
+    <img src="PeacheSlide3.jpg" alt="Slide 3" style="width:100%; height:auto; display:block;">
+    <img src="PeacheSlide4.jpg" alt="Slide 4" style="width:100%; height:auto; display:block;">
+    <img src="PeacheSlide5.jpg" alt="Slide 5" style="width:100%; height:auto; display:block;">
+    <img src="PeacheSlide6.jpg" alt="Slide 6" style="width:100%; height:auto; display:block;">
+    <img src="PeacheSlide7.jpg" alt="Slide 7" style="width:100%; height:auto; display:block;">
+    <img src="PeacheSlide8.jpg" alt="Slide 8" style="width:100%; height:auto; display:block;">
+    <img src="PeacheSlide9.jpg" alt="Slide 9" style="width:100%; height:auto; display:block;">
+    <img src="PeacheSlide10.jpg" alt="Slide 10" style="width:100%; height:auto; display:block;">
+    <img src="PeacheSlide11.jpg" alt="Slide 11" style="width:100%; height:auto; display:block;">
+    <img src="PeacheSlide12.jpg" alt="Slide 12" style="width:100%; height:auto; display:block;">
+    <img src="PeacheSlide13.jpg" alt="Slide 13" style="width:100%; height:auto; display:block;">
+  </div>
+</div>
+
+<a href="project-2.html" class="next-project">
+  <div>
+    <p class="next-label">Next Project</p>
+    <p class="next-title">Project Two</p>
+  </div>
+  <span class="next-arrow">&#8594;</span>
+</a>
+
+<footer>
+  <span>Caitlin Frank &copy; 2026</span>
+  <span><a href="index.html" style="color: inherit; text-decoration: none;">Back to Home</a></span>
+</footer>
+
+</body>
+</html>

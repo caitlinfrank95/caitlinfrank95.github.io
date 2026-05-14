@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GestureCanvas — Caitlin Frank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --bg: #0a0a0a; --surface: #111111; --border: #222222; --text: #e8e4dc; --muted: #666666; --accent: #c8b89a; --serif: 'DM Serif Display', Georgia, serif; --mono: 'DM Mono', 'Courier New', monospace; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--mono); font-size: 14px; line-height: 1.6; min-height: 100vh; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; background: rgba(10,10,10,0.95); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
+  .nav-name { font-family: var(--serif); font-size: 1.1rem; color: var(--text); text-decoration: none; }
+  .nav-back { display: flex; align-items: center; gap: 0.5rem; color: var(--muted); text-decoration: none; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-back:hover { color: var(--text); }
+  .nav-back::before { content: "←"; font-size: 16px; }
+  .project-hero { padding: 10rem 3rem 5rem; border-bottom: 1px solid var(--border); }
+  .project-meta { display: flex; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .meta-item { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .meta-item strong { display: block; color: var(--accent); margin-bottom: 0.25rem; }
+  .project-title { font-family: var(--serif); font-size: clamp(3rem, 8vw, 7rem); font-weight: 400; letter-spacing: -0.03em; line-height: 1.0; margin-bottom: 2rem; }
+  .project-tagline { font-size: 15px; color: var(--muted); max-width: 600px; line-height: 1.8; }
+  .project-cover { width: 100%; aspect-ratio: 16/7; background: #0d0d0d; display: flex; align-items: center; justify-content: center; overflow: hidden; border-bottom: 1px solid var(--border); }
+  .project-cover-placeholder { font-family: var(--serif); font-size: 8rem; color: #1a1a1a; letter-spacing: -0.05em; }
+  .project-body { display: grid; grid-template-columns: 1fr 2fr; gap: 6rem; padding: 6rem 3rem; border-bottom: 1px solid var(--border); }
+  .sidebar { position: sticky; top: 6rem; height: fit-content; }
+  .sidebar-section { margin-bottom: 3rem; }
+  .sidebar-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); }
+  .sidebar-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { padding: 5px 12px; border: 1px solid var(--border); font-size: 11px; letter-spacing: 0.08em; color: var(--muted); }
+  .sidebar-link { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1rem; border: 1px solid var(--border); text-decoration: none; color: var(--text); font-size: 12px; letter-spacing: 0.08em; margin-bottom: 0.5rem; transition: border-color 0.2s, background 0.2s; }
+  .sidebar-link:hover { border-color: var(--accent); background: rgba(200,184,154,0.04); }
+  .sidebar-link span { color: var(--muted); }
+  .project-content h2 { font-family: var(--serif); font-size: 2rem; font-weight: 400; margin: 3rem 0 1rem; color: var(--text); letter-spacing: -0.01em; }
+  .project-content h2:first-child { margin-top: 0; }
+  .project-content p { color: var(--muted); line-height: 1.9; font-size: 14px; margin-bottom: 1.25rem; }
+  .project-content ul { list-style: none; margin-bottom: 1.25rem; }
+  .project-content ul li { color: var(--muted); font-size: 14px; line-height: 1.8; padding-left: 1.5rem; position: relative; margin-bottom: 0.4rem; }
+  .project-content ul li::before { content: "—"; position: absolute; left: 0; color: var(--accent); }
+  .code-block { background: var(--surface); border: 1px solid var(--border); padding: 1.5rem; margin-bottom: 1.25rem; overflow-x: auto; }
+  .code-block code { font-family: var(--mono); font-size: 12px; color: var(--accent); line-height: 1.8; white-space: pre; }
+  .next-project { padding: 5rem 3rem; display: flex; align-items: center; justify-content: space-between; text-decoration: none; color: var(--text); border-bottom: 1px solid var(--border); transition: background 0.3s; }
+  .next-project:hover { background: var(--surface); }
+  .next-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; }
+  .next-title { font-family: var(--serif); font-size: 2.5rem; font-weight: 400; letter-spacing: -0.02em; }
+  .next-arrow { font-size: 3rem; color: var(--accent); }
+  footer { padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; font-size: 11px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
+  @media (max-width: 768px) { nav { padding: 1rem 1.5rem; } .project-hero { padding: 8rem 1.5rem 3rem; } .project-body { grid-template-columns: 1fr; gap: 3rem; padding: 3rem 1.5rem; } .sidebar { position: static; } .next-project { padding: 3rem 1.5rem; } footer { flex-direction: column; gap: 0.5rem; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-name">Caitlin Frank</a>
+  <a href="index.html" class="nav-back">All Projects</a>
+</nav>
+
+<div class="project-hero">
+  <div class="project-meta">
+    <div class="meta-item"><strong>Category</strong>Computer Vision</div>
+    <div class="meta-item"><strong>Year</strong>2025</div>
+    <div class="meta-item"><strong>Type</strong>Personal Project</div>
+    <div class="meta-item"><strong>Language</strong>Python</div>
+  </div>
+  <h1 class="project-title">GestureCanvas</h1>
+  <p class="project-tagline">A real-time hand gesture drawing app — point a finger at a webcam and paint with your hand, no mouse or stylus needed.</p>
+</div>
+
+<div class="project-cover">
+  <p class="project-cover-placeholder">GC</p>
+</div>
+
+<div class="project-body">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <p class="sidebar-label">Skills Used</p>
+      <div class="sidebar-tags">
+        <span class="tag">Python</span>
+        <span class="tag">OpenCV</span>
+        <span class="tag">MediaPipe</span>
+        <span class="tag">cvzone</span>
+        <span class="tag">Computer Vision</span>
+        <span class="tag">Hand Tracking</span>
+        <span class="tag">NumPy</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <p class="sidebar-label">Links</p>
+      <a href="https://github.com/caitlinfrank95/GestureCanvas" target="_blank" class="sidebar-link">GitHub Repo <span>&#8599;</span></a>
+    </div>
+  </aside>
+
+  <div class="project-content">
+    <h2>Overview</h2>
+    <p>
+      GestureCanvas is a personal project I built to explore computer vision and real-time hand tracking. It uses your webcam to detect hand gestures and turns them into drawing strokes on a live canvas — no mouse, no stylus, just your fingers. The number of fingers you hold up controls the colour, and an open palm erases.
+    </p>
+    <p>
+      It was built entirely in Python using OpenCV for the video stream and canvas rendering, and cvzone's HandTrackingModule (built on top of MediaPipe) for hand landmark detection. The whole thing runs in real time at webcam frame rate.
+    </p>
+
+    <h2>How It Works</h2>
+    <ul>
+      <li><strong>1 finger up</strong> &#8212; draws in red</li>
+      <li><strong>2 fingers up</strong> &#8212; draws in blue</li>
+      <li><strong>3 fingers up</strong> &#8212; draws in green</li>
+      <li><strong>4 fingers up</strong> &#8212; draws in yellow</li>
+      <li><strong>Open palm (5 fingers)</strong> &#8212; erases using the palm centre position</li>
+      <li><strong>C key</strong> &#8212; clears the entire canvas</li>
+      <li><strong>S key</strong> &#8212; saves the drawing as a PNG file</li>
+    </ul>
+    <p>
+      The app detects the index finger tip landmark (point 8 from MediaPipe's 21-point hand model) and draws a continuous line between the previous and current frame positions. The canvas layer is blended over the live webcam feed using OpenCV's <code>addWeighted</code> so you can see both your hand and the drawing at the same time.
+    </p>
+
+    <h2>The Code</h2>
+    <p>The core logic is simple — each frame, check how many fingers are up, pick a colour, and draw from the previous fingertip position to the current one:</p>
+    <div class="code-block">
+      <code>finger_count = sum(fingers[1:])  # ignore thumb
+
+if finger_count == 1:
+    colour = (0, 0, 255)   # Red
+elif finger_count == 2:
+    colour = (255, 0, 0)   # Blue
+elif finger_count == 3:
+    colour = (0, 255, 0)   # Green
+elif finger_count == 4:
+    colour = (0, 255, 255) # Yellow
+
+cv2.line(canvas, (prev_x, prev_y), (x, y), colour, brush_size)</code>
+    </div>
+
+    <h2>What I Learned</h2>
+    <p>
+      This was my first time working with computer vision and real-time video processing. Getting smooth, continuous lines from noisy hand landmark data was the main challenge &#8212; the finger tip position jumps around between frames, so managing the previous position carefully was key to avoiding broken strokes.
+    </p>
+    <ul>
+      <li><strong>OpenCV</strong> &#8212; video capture, frame manipulation, drawing primitives, and image blending</li>
+      <li><strong>MediaPipe / cvzone</strong> &#8212; hand landmark detection and finger state classification</li>
+      <li><strong>Real-time state management</strong> &#8212; tracking previous positions across frames to produce smooth continuous lines</li>
+      <li><strong>Computer vision concepts</strong> &#8212; understanding how hand tracking models work and how to extract useful data from them</li>
+    </ul>
+  </div>
+</div>
+
+<a href="project-5.html" class="next-project">
+  <div>
+    <p class="next-label">Next Project</p>
+    <p class="next-title">Electronics</p>
+  </div>
+  <span class="next-arrow">&#8594;</span>
+</a>
+
+<footer>
+  <span>Caitlin Frank &copy; 2026</span>
+  <span><a href="index.html" style="color: inherit; text-decoration: none;">Back to Home</a></span>
+</footer>
+
+</body>
+</html>

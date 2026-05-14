@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lunar Rover Design — Caitlin Frank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0a0a; --surface: #111111; --border: #222222;
+    --text: #e8e4dc; --muted: #666666; --accent: #c8b89a;
+    --serif: 'DM Serif Display', Georgia, serif;
+    --mono: 'DM Mono', 'Courier New', monospace;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--mono); font-size: 14px; line-height: 1.6; min-height: 100vh; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; background: rgba(10,10,10,0.95); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
+  .nav-name { font-family: var(--serif); font-size: 1.1rem; color: var(--text); text-decoration: none; }
+  .nav-back { display: flex; align-items: center; gap: 0.5rem; color: var(--muted); text-decoration: none; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-back:hover { color: var(--text); }
+  .nav-back::before { content: "←"; font-size: 16px; }
+  .project-hero { padding: 10rem 3rem 5rem; border-bottom: 1px solid var(--border); }
+  .project-meta { display: flex; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .meta-item { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .meta-item strong { display: block; color: var(--accent); margin-bottom: 0.25rem; }
+  .project-title { font-family: var(--serif); font-size: clamp(3rem, 8vw, 7rem); font-weight: 400; letter-spacing: -0.03em; line-height: 1.0; margin-bottom: 2rem; }
+  .project-tagline { font-size: 15px; color: var(--muted); max-width: 600px; line-height: 1.8; }
+  .project-cover { width: 100%; aspect-ratio: 16/7; background: var(--surface); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .project-cover video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .project-body { display: grid; grid-template-columns: 1fr 2fr; gap: 6rem; padding: 6rem 3rem; border-bottom: 1px solid var(--border); }
+  .sidebar { position: sticky; top: 6rem; height: fit-content; }
+  .sidebar-section { margin-bottom: 3rem; }
+  .sidebar-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); }
+  .sidebar-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { padding: 5px 12px; border: 1px solid var(--border); font-size: 11px; letter-spacing: 0.08em; color: var(--muted); }
+  .sidebar-link { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1rem; border: 1px solid var(--border); text-decoration: none; color: var(--text); font-size: 12px; letter-spacing: 0.08em; margin-bottom: 0.5rem; transition: border-color 0.2s, background 0.2s; }
+  .sidebar-link:hover { border-color: var(--accent); background: rgba(200,184,154,0.04); }
+  .sidebar-link span { color: var(--muted); }
+  .project-content h2 { font-family: var(--serif); font-size: 2rem; font-weight: 400; margin: 3rem 0 1rem; color: var(--text); letter-spacing: -0.01em; }
+  .project-content h2:first-child { margin-top: 0; }
+  .project-content p { color: var(--muted); line-height: 1.9; font-size: 14px; margin-bottom: 1.25rem; }
+  .project-content ul { list-style: none; margin-bottom: 1.25rem; }
+  .project-content ul li { color: var(--muted); font-size: 14px; line-height: 1.8; padding-left: 1.5rem; position: relative; margin-bottom: 0.4rem; }
+  .project-content ul li::before { content: "—"; position: absolute; left: 0; color: var(--accent); }
+  .project-gallery { padding: 5rem 3rem; border-bottom: 1px solid var(--border); }
+  .gallery-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 2rem; }
+  .next-project { padding: 5rem 3rem; display: flex; align-items: center; justify-content: space-between; text-decoration: none; color: var(--text); border-bottom: 1px solid var(--border); transition: background 0.3s; }
+  .next-project:hover { background: var(--surface); }
+  .next-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; }
+  .next-title { font-family: var(--serif); font-size: 2.5rem; font-weight: 400; letter-spacing: -0.02em; }
+  .next-arrow { font-size: 3rem; color: var(--accent); }
+  footer { padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; font-size: 11px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .project-hero { padding: 8rem 1.5rem 3rem; }
+    .project-body { grid-template-columns: 1fr; gap: 3rem; padding: 3rem 1.5rem; }
+    .sidebar { position: static; }
+    .project-gallery { padding: 3rem 1.5rem; }
+    .next-project { padding: 3rem 1.5rem; }
+    footer { flex-direction: column; gap: 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-name">Caitlin Frank</a>
+  <a href="index.html" class="nav-back">All Projects</a>
+</nav>
+
+<div class="project-hero">
+  <div class="project-meta">
+    <div class="meta-item"><strong>Category</strong>CAD Design</div>
+    <div class="meta-item"><strong>Year</strong>2025</div>
+    <div class="meta-item"><strong>Team</strong>6 Engineers</div>
+    <div class="meta-item"><strong>Type</strong>RMIT University</div>
+    <div class="meta-item"><strong>Course</strong>OENG1250</div>
+  </div>
+  <h1 class="project-title">Lunar Rover Design</h1>
+  <p class="project-tagline">A SolidWorks CAD project completed at RMIT University. I designed the wheels for a six-wheeled lunar rover, working in a multidisciplinary engineering team of six.</p>
+</div>
+
+<div class="project-cover">
+  <video src="Group18FULL_ASSEMBLY2.mp4" autoplay muted loop playsinline></video>
+</div>
+
+<div class="project-body">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <p class="sidebar-label">Skills Used</p>
+      <div class="sidebar-tags">
+        <span class="tag">SolidWorks</span>
+        <span class="tag">CAD Modelling</span>
+        <span class="tag">Technical Drawing</span>
+        <span class="tag">Engineering Design</span>
+        <span class="tag">3D Assembly</span>
+        <span class="tag">Design Process</span>
+        <span class="tag">Team Collaboration</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <p class="sidebar-label">Links</p>
+      <a href="Assessment-2_Group_Design_Project__1_.pdf" target="_blank" class="sidebar-link">Assignment Brief (.pdf) <span>&#8599;</span></a>
+      <a href="4091918_Caitlin_DesignJournal.pdf" download class="sidebar-link">My Design Journal (.pdf) <span>&#8595;</span></a>
+      <a href="https://github.com/yourusername" target="_blank" class="sidebar-link">GitHub <span>&#8599;</span></a>
+    </div>
+  </aside>
+
+  <div class="project-content">
+    <h2>Overview</h2>
+    <p>
+      As part of RMIT University&#8217;s OENG1250 Introduction to Engineering Design course, our team was tasked with designing a lunar rover capable of collecting and delivering regolith on the Moon&#8217;s surface. The project was inspired by the Australian Moon to Mars initiative &#8212; a real-world collaboration between Australian universities, industry, and NASA. Six of us each took ownership of one rover component, designing it from scratch in SolidWorks and integrating it into a full group assembly.
+    </p>
+    <p>
+      My component was the <strong>wheels</strong>. I was responsible for designing a set of six wheels that were lightweight, durable, and capable of traversing loose and abrasive lunar regolith &#8212; while also interfacing correctly with the drive motor being designed by my teammate.
+    </p>
+
+    <h2>My Design</h2>
+    <p>
+      The wheel had to sit within a mandated diameter range of 80&#8211;130 mm. Through speed calculations using the motor&#8217;s 10 RPM output, I determined that a <strong>130 mm diameter</strong> was necessary to get close to the required speed band of 0.28&#8211;0.37 km/h, with a small gear-up ratio of 1.14&#8211;1.51x needed to bridge the gap.
+    </p>
+    <ul>
+      <li><strong>Tread pattern</strong> &#8212; after comparing a chevron/arrow pattern against a wavy sine pattern in CAD, I selected the chevron design for its superior self-cleaning ability and forward traction on loose regolith, backed by NASA Apollo rover research</li>
+      <li><strong>Material</strong> &#8212; compared aluminium, steel, titanium, and carbon fibre; selected <strong>Aluminium 6061-T6</strong> at 116g per wheel for its balance of weight, durability, and aerospace-proven abrasion resistance when hard-anodised</li>
+      <li><strong>Dimensions</strong> &#8212; 130 mm diameter &#215; 35 mm wide, with a 22 mm boss, 6 mm bore for the motor shaft, and six spokes at 3 mm thick &#215; 10 mm wide</li>
+      <li><strong>Sub-assembly</strong> &#8212; integrated the wheel with the drive motor and gearbox housing into a compact, independently-powered drive module</li>
+      <li><strong>Ground pressure check</strong> &#8212; calculated a contact pressure of 10.3 kPa, confirming the wheel would not sink excessively into loose regolith</li>
+    </ul>
+
+    <h2>The Process</h2>
+    <ul>
+      <li><strong>Sketching &amp; ideation</strong> &#8212; hand-sketched initial wheel geometries and tread patterns before moving into CAD</li>
+      <li><strong>Preliminary CAD model</strong> &#8212; built in SolidWorks and shared with the team by Week 6 to allow sub-assembly testing with adjacent components</li>
+      <li><strong>Detailed design</strong> &#8212; refined geometry, completed technical drawings with orthographic, section, and isometric views, and produced a full bill of materials</li>
+      <li><strong>Team meetings</strong> &#8212; attended 6 meetings across the project to coordinate interface dimensions and resolve sub-assembly issues as they came up</li>
+    </ul>
+
+    <h2>What I Learned</h2>
+    <p>
+      This was my first time going through a full engineering design process &#8212; from a hand sketch to a dimensioned CAD model to a proper technical drawing. Having to justify every decision (why 130 mm, why aluminium, why chevron) through calculations and research made me think about design in a much more structured way than I had before.
+    </p>
+    <p>
+      Working across a team of six where every component had to physically connect to someone else&#8217;s work was also a completely different challenge. You can&#8217;t just design in isolation &#8212; your dimensions affect everyone around you, and that coordination is its own skill.
+    </p>
+    <ul>
+      <li><strong>SolidWorks</strong> &#8212; built preliminary and detailed models, technical drawings, and a sub-assembly to industry drawing standards</li>
+      <li><strong>Engineering calculations</strong> &#8212; applied speed, gear ratio, mass, and ground pressure calculations to justify every design decision</li>
+      <li><strong>Material selection</strong> &#8212; learned how to compare materials systematically against real engineering constraints</li>
+      <li><strong>Team coordination</strong> &#8212; managed shared interface dimensions across six different workstreams, adapting my design when sub-assembly issues came up</li>
+    </ul>
+  </div>
+</div>
+
+<div class="project-gallery">
+  <p class="gallery-label">Assignment Brief</p>
+  <div style="display:flex; flex-direction:column; gap:0.5rem; max-width:420px;">
+    <a href="Assessment-2_Group_Design_Project__1_.pdf" target="_blank" style="display:flex; align-items:center; justify-content:space-between; padding:1rem 1.5rem; border:1px solid var(--border); text-decoration:none; color:var(--text); font-size:13px; letter-spacing:0.05em; transition:border-color 0.2s;">
+      &#128196; Assignment Brief (.pdf) <span style="color:var(--muted);">&#8599;</span>
+    </a>
+    <a href="4091918_Caitlin_DesignJournal.pdf" download style="display:flex; align-items:center; justify-content:space-between; padding:1rem 1.5rem; border:1px solid var(--border); text-decoration:none; color:var(--text); font-size:13px; letter-spacing:0.05em; transition:border-color 0.2s;">
+      &#128196; My Design Journal (.pdf) <span style="color:var(--muted);">&#8595;</span>
+    </a>
+  </div>
+</div>
+
+<a href="project-4.html" class="next-project">
+  <div>
+    <p class="next-label">Next Project</p>
+    <p class="next-title">Project Four</p>
+  </div>
+  <span class="next-arrow">&#8594;</span>
+</a>
+
+<footer>
+  <span>Caitlin Frank &copy; 2026</span>
+  <span><a href="index.html" style="color: inherit; text-decoration: none;">Back to Home</a></span>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wide Area Networks — Caitlin Frank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0a0a; --surface: #111111; --border: #222222;
+    --text: #e8e4dc; --muted: #666666; --accent: #c8b89a;
+    --serif: 'DM Serif Display', Georgia, serif;
+    --mono: 'DM Mono', 'Courier New', monospace;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--mono); font-size: 14px; line-height: 1.6; min-height: 100vh; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; background: rgba(10,10,10,0.95); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
+  .nav-name { font-family: var(--serif); font-size: 1.1rem; color: var(--text); text-decoration: none; }
+  .nav-back { display: flex; align-items: center; gap: 0.5rem; color: var(--muted); text-decoration: none; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-back:hover { color: var(--text); }
+  .nav-back::before { content: "←"; font-size: 16px; }
+  .project-hero { padding: 10rem 3rem 5rem; border-bottom: 1px solid var(--border); }
+  .project-meta { display: flex; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .meta-item { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .meta-item strong { display: block; color: var(--accent); margin-bottom: 0.25rem; }
+  .project-title { font-family: var(--serif); font-size: clamp(3rem, 8vw, 7rem); font-weight: 400; letter-spacing: -0.03em; line-height: 1.0; margin-bottom: 2rem; }
+  .project-tagline { font-size: 15px; color: var(--muted); max-width: 600px; line-height: 1.8; }
+  .project-cover { width: 100%; aspect-ratio: 16/7; background: var(--surface); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .project-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .project-body { display: grid; grid-template-columns: 1fr 2fr; gap: 6rem; padding: 6rem 3rem; border-bottom: 1px solid var(--border); }
+  .sidebar { position: sticky; top: 6rem; height: fit-content; }
+  .sidebar-section { margin-bottom: 3rem; }
+  .sidebar-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); }
+  .sidebar-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { padding: 5px 12px; border: 1px solid var(--border); font-size: 11px; letter-spacing: 0.08em; color: var(--muted); }
+  .sidebar-link { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1rem; border: 1px solid var(--border); text-decoration: none; color: var(--text); font-size: 12px; letter-spacing: 0.08em; margin-bottom: 0.5rem; transition: border-color 0.2s, background 0.2s; }
+  .sidebar-link:hover { border-color: var(--accent); background: rgba(200,184,154,0.04); }
+  .sidebar-link span { color: var(--muted); }
+  .project-content h2 { font-family: var(--serif); font-size: 2rem; font-weight: 400; margin: 3rem 0 1rem; color: var(--text); letter-spacing: -0.01em; }
+  .project-content h2:first-child { margin-top: 0; }
+  .project-content p { color: var(--muted); line-height: 1.9; font-size: 14px; margin-bottom: 1.25rem; }
+  .project-content ul { list-style: none; margin-bottom: 1.25rem; }
+  .project-content ul li { color: var(--muted); font-size: 14px; line-height: 1.8; padding-left: 1.5rem; position: relative; margin-bottom: 0.4rem; }
+  .project-content ul li::before { content: "—"; position: absolute; left: 0; color: var(--accent); }
+  .project-gallery { padding: 5rem 3rem; border-bottom: 1px solid var(--border); }
+  .gallery-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 2rem; }
+  .download-links { display: flex; flex-direction: column; gap: 0.5rem; }
+  .next-project { padding: 5rem 3rem; display: flex; align-items: center; justify-content: space-between; text-decoration: none; color: var(--text); border-bottom: 1px solid var(--border); transition: background 0.3s; }
+  .next-project:hover { background: var(--surface); }
+  .next-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; }
+  .next-title { font-family: var(--serif); font-size: 2.5rem; font-weight: 400; letter-spacing: -0.02em; }
+  .next-arrow { font-size: 3rem; color: var(--accent); }
+  footer { padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; font-size: 11px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .project-hero { padding: 8rem 1.5rem 3rem; }
+    .project-body { grid-template-columns: 1fr; gap: 3rem; padding: 3rem 1.5rem; }
+    .sidebar { position: static; }
+    .project-gallery { padding: 3rem 1.5rem; }
+    .next-project { padding: 3rem 1.5rem; }
+    footer { flex-direction: column; gap: 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-name">Caitlin Frank</a>
+  <a href="index.html" class="nav-back">All Projects</a>
+</nav>
+
+<div class="project-hero">
+  <div class="project-meta">
+    <div class="meta-item"><strong>Category</strong>Networking</div>
+    <div class="meta-item"><strong>Year</strong>2025</div>
+    <div class="meta-item"><strong>Team</strong>2 people</div>
+    <div class="meta-item"><strong>Course</strong>EEET2368</div>
+    <div class="meta-item"><strong>Type</strong>RMIT University</div>
+  </div>
+  <h1 class="project-title">Wide Area Networks</h1>
+  <p class="project-tagline">A Cisco Packet Tracer lab designing and analysing a packet-switched WAN connecting four LANs through edge and core routers with dynamic RIP routing.</p>
+</div>
+
+<div class="project-cover">
+  <img src="Lab4.jpg" alt="Cisco Packet Tracer WAN topology">
+</div>
+
+<div class="project-body">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <p class="sidebar-label">Skills Used</p>
+      <div class="sidebar-tags">
+        <span class="tag">Cisco Packet Tracer</span>
+        <span class="tag">IP Addressing</span>
+        <span class="tag">Subnetting</span>
+        <span class="tag">RIP Routing</span>
+        <span class="tag">WAN Design</span>
+        <span class="tag">Network Analysis</span>
+        <span class="tag">Traceroute</span>
+        <span class="tag">Link Redundancy</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <p class="sidebar-label">Downloads</p>
+      <a href="Lab_Report_04__2_.docx" download class="sidebar-link">Lab Report (.docx) <span>&#8595;</span></a>
+    </div>
+  </aside>
+
+  <div class="project-content">
+    <h2>Overview</h2>
+    <p>
+      This lab was completed as part of EEET2368 Network Fundamentals and Applications at RMIT University. Working in a pair, we designed, configured and analysed an IP-based packet-switched Wide Area Network using <strong>Cisco Packet Tracer</strong>. The network connected four separate LANs through a topology of four edge routers and one core router, built up step by step from individual LANs through to a fully interconnected WAN.
+    </p>
+    <p>
+      The lab covered the full process of bringing a WAN to life &#8212; from configuring IP addresses and subnet masks on every device, to enabling dynamic routing with RIP, to stress-testing the network by simulating link failures and observing how traffic rerouted itself in real time.
+    </p>
+
+    <h2>What We Built</h2>
+    <ul>
+      <li><strong>Four LANs</strong> &#8212; Network 1 (3 PCs), Network 2 (2 PCs), Network 3 (2 PCs), Network 4 (1 PC), each connected via a 2960 switch</li>
+      <li><strong>WAN topology</strong> &#8212; four edge routers connecting each LAN to the wider network, plus a core router providing a redundant path between edge routers</li>
+      <li><strong>IP addressing &amp; subnetting</strong> &#8212; configured /24 subnet masks across all devices, with router-to-router links on separate 10.x.x.x address ranges</li>
+      <li><strong>RIP dynamic routing</strong> &#8212; enabled Routing Information Protocol on all routers so they could automatically update their routing tables and discover paths across the full network</li>
+      <li><strong>Connectivity testing</strong> &#8212; verified communication using ping across all networks and traceroute to map the exact path packets took between any two devices</li>
+      <li><strong>Link redundancy testing</strong> &#8212; simulated link failures by disabling router interfaces mid-ping, observing how the network detected the failure, recalculated routes, and restored communication through alternative paths</li>
+    </ul>
+
+    <h2>Key Findings</h2>
+    <p>
+      One of the most interesting parts of the lab was watching packet-switched routing respond to failure in real time. When a link was disabled during an extended 200-packet ping, there was a brief window of dropped packets &#8212; the routing convergence period &#8212; before RIP updated the tables and traffic found an alternative path automatically.
+    </p>
+    <p>
+      We also explored the difference between circuit-switched and packet-switched networks through the lens of delay: circuit switching gives deterministic delay because it reserves a dedicated path, while packet switching shares bandwidth dynamically, meaning delays vary with congestion and queuing. Testing both simultaneous pings from different sources through shared links made this concept tangible rather than theoretical.
+    </p>
+    <ul>
+      <li><strong>Single link disabled</strong> &#8212; RIP rerouted traffic through the core router after a short convergence delay, communication restored</li>
+      <li><strong>Both paths to Edge Router 3 disabled</strong> &#8212; no alternative path existed, packets timed out entirely, demonstrating why redundancy matters</li>
+      <li><strong>Traceroute analysis</strong> &#8212; confirmed exact hop-by-hop paths, observed that switches don't appear in traceroute output (Layer 2 vs Layer 3)</li>
+    </ul>
+
+    <h2>What I Learned</h2>
+    <p>
+      This lab made routing protocols feel real. Reading about RIP in lectures is one thing &#8212; watching it detect a broken link and reroute 200 live packets through a different path is another. It also made the trade-offs in network design very concrete: more redundant links mean more resilience, but there's always a convergence gap where packets are lost while the network figures out the new topology.
+    </p>
+    <ul>
+      <li><strong>Cisco Packet Tracer</strong> &#8212; built and configured a multi-router WAN topology from scratch</li>
+      <li><strong>IP addressing &amp; subnetting</strong> &#8212; assigned and managed addresses across 5 routers, 4 switches, and 8 PCs</li>
+      <li><strong>Dynamic routing (RIP)</strong> &#8212; configured and observed how routing tables update automatically in response to topology changes</li>
+      <li><strong>Network troubleshooting</strong> &#8212; used ping and traceroute to diagnose connectivity issues and verify paths</li>
+      <li><strong>Redundancy &amp; fault tolerance</strong> &#8212; simulated real failure scenarios and observed the limits of dynamic rerouting</li>
+    </ul>
+  </div>
+</div>
+
+<div class="project-gallery">
+  <p class="gallery-label">Downloads</p>
+  <div class="download-links">
+    <a href="Lab_Report_04__2_.docx" download class="sidebar-link" style="max-width:400px;">
+      &#128196; Lab Report (.docx) <span>&#8595;</span>
+    </a>
+  </div>
+</div>
+
+<a href="project-3.html" class="next-project">
+  <div>
+    <p class="next-label">Next Project</p>
+    <p class="next-title">Lunar Rover Design</p>
+  </div>
+  <span class="next-arrow">&#8594;</span>
+</a>
+
+<footer>
+  <span>Caitlin Frank &copy; 2026</span>
+  <span><a href="index.html" style="color: inherit; text-decoration: none;">Back to Home</a></span>
+</footer>
+
+</body>
+</html>

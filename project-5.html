@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Electronics — Caitlin Frank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --bg: #0a0a0a; --surface: #111111; --border: #222222; --text: #e8e4dc; --muted: #666666; --accent: #c8b89a; --serif: 'DM Serif Display', Georgia, serif; --mono: 'DM Mono', 'Courier New', monospace; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--mono); font-size: 14px; line-height: 1.6; min-height: 100vh; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; background: rgba(10,10,10,0.95); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
+  .nav-name { font-family: var(--serif); font-size: 1.1rem; color: var(--text); text-decoration: none; }
+  .nav-back { display: flex; align-items: center; gap: 0.5rem; color: var(--muted); text-decoration: none; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-back:hover { color: var(--text); }
+  .nav-back::before { content: "←"; font-size: 16px; }
+  .project-hero { padding: 10rem 3rem 5rem; border-bottom: 1px solid var(--border); }
+  .project-meta { display: flex; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .meta-item { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .meta-item strong { display: block; color: var(--accent); margin-bottom: 0.25rem; }
+  .project-title { font-family: var(--serif); font-size: clamp(3rem, 8vw, 7rem); font-weight: 400; letter-spacing: -0.03em; line-height: 1.0; margin-bottom: 2rem; }
+  .project-tagline { font-size: 15px; color: var(--muted); max-width: 600px; line-height: 1.8; }
+  .project-cover { width: 100%; aspect-ratio: 16/7; background: var(--surface); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .project-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .project-body { display: grid; grid-template-columns: 1fr 2fr; gap: 6rem; padding: 6rem 3rem; border-bottom: 1px solid var(--border); }
+  .sidebar { position: sticky; top: 6rem; height: fit-content; }
+  .sidebar-section { margin-bottom: 3rem; }
+  .sidebar-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); }
+  .sidebar-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { padding: 5px 12px; border: 1px solid var(--border); font-size: 11px; letter-spacing: 0.08em; color: var(--muted); }
+  .sidebar-link { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1rem; border: 1px solid var(--border); text-decoration: none; color: var(--text); font-size: 12px; letter-spacing: 0.08em; margin-bottom: 0.5rem; transition: border-color 0.2s, background 0.2s; }
+  .sidebar-link:hover { border-color: var(--accent); background: rgba(200,184,154,0.04); }
+  .sidebar-link span { color: var(--muted); }
+  .project-content h2 { font-family: var(--serif); font-size: 2rem; font-weight: 400; margin: 3rem 0 1rem; color: var(--text); letter-spacing: -0.01em; }
+  .project-content h2:first-child { margin-top: 0; }
+  .project-content p { color: var(--muted); line-height: 1.9; font-size: 14px; margin-bottom: 1.25rem; }
+  .project-content ul { list-style: none; margin-bottom: 1.25rem; }
+  .project-content ul li { color: var(--muted); font-size: 14px; line-height: 1.8; padding-left: 1.5rem; position: relative; margin-bottom: 0.4rem; }
+  .project-content ul li::before { content: "—"; position: absolute; left: 0; color: var(--accent); }
+  .next-project { padding: 5rem 3rem; display: flex; align-items: center; justify-content: space-between; text-decoration: none; color: var(--text); border-bottom: 1px solid var(--border); transition: background 0.3s; }
+  .next-project:hover { background: var(--surface); }
+  .next-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.75rem; }
+  .next-title { font-family: var(--serif); font-size: 2.5rem; font-weight: 400; letter-spacing: -0.02em; }
+  .next-arrow { font-size: 3rem; color: var(--accent); }
+  footer { padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; font-size: 11px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
+  @media (max-width: 768px) { nav { padding: 1rem 1.5rem; } .project-hero { padding: 8rem 1.5rem 3rem; } .project-body { grid-template-columns: 1fr; gap: 3rem; padding: 3rem 1.5rem; } .sidebar { position: static; } .next-project { padding: 3rem 1.5rem; } footer { flex-direction: column; gap: 0.5rem; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-name">Caitlin Frank</a>
+  <a href="index.html" class="nav-back">All Projects</a>
+</nav>
+
+<div class="project-hero">
+  <div class="project-meta">
+    <div class="meta-item"><strong>Category</strong>Electronics</div>
+    <div class="meta-item"><strong>Year</strong>2025</div>
+    <div class="meta-item"><strong>Type</strong>RMIT University</div>
+    <div class="meta-item"><strong>Tools</strong>Multisim / Lab</div>
+  </div>
+  <h1 class="project-title">Electronics</h1>
+  <p class="project-tagline">BJT transistor biasing and amplifier design &#8212; hand calculated, simulated in Multisim, then verified with physical lab measurements.</p>
+</div>
+
+<div class="project-cover">
+  <img src="electronics.jpg" alt="Electronics project">
+</div>
+
+<div class="project-body">
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <p class="sidebar-label">Skills Used</p>
+      <div class="sidebar-tags">
+        <span class="tag">Multisim</span>
+        <span class="tag">BJT Transistors</span>
+        <span class="tag">Circuit Design</span>
+        <span class="tag">AC/DC Analysis</span>
+        <span class="tag">Oscilloscope</span>
+        <span class="tag">Small-Signal Model</span>
+        <span class="tag">Lab Measurement</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <p class="sidebar-label">Downloads</p>
+      <a href="Experiment_3.docx" download class="sidebar-link">Lab Report (.docx) <span>&#8595;</span></a>
+    </div>
+  </aside>
+
+  <div class="project-content">
+    <h2>Overview</h2>
+    <p>
+      This experiment was completed as part of an electronics course at RMIT University. It covered two core areas of analog electronics: <strong>BJT transistor biasing</strong> and <strong>BJT amplifier design</strong>. For each, I worked through the full process &#8212; hand calculations first, then Multisim simulation, then physical lab measurement &#8212; comparing all three sets of results to understand where real-world components deviate from ideal theory.
+    </p>
+
+    <h2>Exercise 1 &#8212; BJT DC Biasing</h2>
+    <p>
+      The first exercise involved designing a voltage divider bias circuit for a BJT transistor, calculating the resistor values to set specific operating point conditions, then verifying those conditions through simulation and physical measurement.
+    </p>
+    <ul>
+      <li><strong>Designed resistor values</strong> &#8212; Rb1 = 70k&#8486;, Rb2 = 90k&#8486;, Rc = 2k&#8486;, Re = 2k&#8486; to achieve IC = 1mA and VCE = 1V</li>
+      <li><strong>Confirmed active mode operation</strong> &#8212; VBE = 0.7V (forward biased), VCB = 0.3V (reverse biased), confirming the transistor was in active mode</li>
+      <li><strong>Simulated in Multisim</strong> &#8212; DC operating point analysis returned IB = 4.25&#956;A, IC = 0.999mA, VCE = 0.997V, closely matching hand calculations</li>
+      <li><strong>Lab measurement</strong> &#8212; measured values were consistent, with small variations attributed to component tolerances and real-world resistor/transistor behaviour</li>
+    </ul>
+
+    <h2>Exercise 2 &#8212; BJT Amplifier</h2>
+    <p>
+      The second exercise extended the DC bias circuit into a full AC amplifier, adding coupling and bypass capacitors and analysing the small-signal gain, input resistance, and output resistance.
+    </p>
+    <ul>
+      <li><strong>Small-signal gain</strong> &#8212; calculated theoretical gain of &#8722;80 V/V using Av = &#8722;Rc/re where re = 25&#8486;</li>
+      <li><strong>AC sweep (Multisim)</strong> &#8212; mid-band gain measured at 27.17 dB (22.8 V/V), with the gain flattening at around 100 kHz</li>
+      <li><strong>Input resistance</strong> &#8212; calculated Rin = 5.2k&#8486;, simulated 5.22k&#8486;, measured 6.27k&#8486; (slight increase due to probe effect and real component resistance)</li>
+      <li><strong>Output resistance</strong> &#8212; simulated and measured Rout both came to 1.14k&#8486;, closely validating the model</li>
+    </ul>
+
+    <h2>Results Comparison</h2>
+    <p>
+      Across both exercises, hand calculations, Multisim simulations, and physical lab measurements were all within acceptable tolerance of each other. The main discrepancies were between the ideal hand calculations and measured results &#8212; expected given that hand calculations assume perfect components, while real resistors and transistors have tolerances and parasitic effects.
+    </p>
+    <ul>
+      <li><strong>Mid-band gain</strong> &#8212; calculated 80 V/V vs simulated/measured 22.8 V/V; difference explained by the simplified re model and capacitor effects not captured in the approximation</li>
+      <li><strong>Rin &amp; Rout</strong> &#8212; simulation and measurement closely matched, confirming the amplifier was designed and implemented correctly</li>
+    </ul>
+
+    <h2>What I Learned</h2>
+    <p>
+      This experiment made the gap between theory and practice very tangible. Running the same circuit through calculations, then simulation, then a real breadboard, and seeing where and why the numbers diverge builds a much stronger intuition for electronics than any single approach on its own.
+    </p>
+    <ul>
+      <li><strong>BJT biasing</strong> &#8212; designed a voltage divider bias circuit from scratch to hit a target operating point</li>
+      <li><strong>Small-signal analysis</strong> &#8212; calculated gain, input resistance, and output resistance analytically using the small-signal model</li>
+      <li><strong>Multisim</strong> &#8212; built and simulated DC operating point, AC sweep, and transient analyses</li>
+      <li><strong>Lab measurement</strong> &#8212; used oscilloscopes and probes to measure real circuit behaviour and compare against theoretical predictions</li>
+      <li><strong>Critical analysis</strong> &#8212; identified and explained sources of discrepancy between ideal, simulated, and measured results</li>
+    </ul>
+  </div>
+</div>
+
+<a href="project-1.html" class="next-project">
+  <div>
+    <p class="next-label">Back to Start</p>
+    <p class="next-title">Peach&#233;</p>
+  </div>
+  <span class="next-arrow">&#8594;</span>
+</a>
+
+<footer>
+  <span>Caitlin Frank &copy; 2026</span>
+  <span><a href="index.html" style="color: inherit; text-decoration: none;">Back to Home</a></span>
+</footer>
+
+</body>
+</html>
