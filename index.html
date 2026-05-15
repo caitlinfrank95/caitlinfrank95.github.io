@@ -135,26 +135,7 @@
     max-width: 400px;
     line-height: 1.8;
   }
-  .hero-scroll {
-    position: absolute;
-    bottom: 3rem;
-    left: 3rem;
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    writing-mode: vertical-rl;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  .hero-scroll::after {
-    content: '';
-    display: block;
-    width: 1px;
-    height: 48px;
-    background: var(--muted);
-  }
+  .hero-scroll { display: none; }
 
   /* SECTION SHARED */
   section {
@@ -460,7 +441,6 @@
       </div>
     </div>
   </div>
-  <p class="hero-scroll">Scroll</p>
 </section>
 
 <!-- WORK -->
@@ -470,11 +450,13 @@
 
     <!-- PROJECT 1 — featured -->
     <a href="project-1.html" class="project-card fade-in">
-      <div style="display:flex; width:100%; height:100%; background:#1a1008; overflow:hidden; position:relative;">
-        <video autoplay muted loop playsinline style="height:100%; width:auto; object-fit:cover; flex-shrink:0;"><source src="PeacheVideo.mp4" type="video/mp4"></video>
+      <div style="position:relative; width:100%; height:100%; overflow:hidden; background:#1a1008;">
+        <iframe src="https://www.youtube.com/embed/OtPC8la8qTE?autoplay=1&mute=1&loop=1&playlist=OtPC8la8qTE&controls=0&modestbranding=1&playsinline=1"
+          style="position:absolute; top:50%; left:0; width:40%; height:200%; transform:translateY(-50%); border:none; pointer-events:none;"
+          allow="autoplay; encrypted-media" allowfullscreen></iframe>
         <img src="PeacheHappyFlow.jpg" alt="Peacche app mockup"
-          style="flex:1; height:100%; object-fit:cover; object-position:center;">
-        <div style="position:absolute; top:1.25rem; right:1.25rem; display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.55); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:8px 12px;">
+          style="position:absolute; top:0; right:0; width:60%; height:100%; object-fit:cover; object-position:center;">
+        <div style="position:absolute; top:1.25rem; right:1.25rem; display:flex; align-items:center; gap:8px; background:rgba(0,0,0,0.55); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:8px 12px; z-index:2;">
           <img src="AppleFoundationLogo.png" alt="Apple Foundation Program" style="height:28px; width:auto; display:block;">
           <span style="font-size:10px; letter-spacing:0.08em; color:rgba(232,228,220,0.85); white-space:nowrap;">Apple Foundation Program</span>
         </div>
@@ -500,7 +482,11 @@
 
     <!-- PROJECT 3 -->
     <a href="project-3.html" class="project-card fade-in">
-      <video autoplay muted loop playsinline style="width:100%; height:100%; object-fit:cover; display:block;"><source src="Group18FULL_ASSEMBLY2.mp4" type="video/mp4"></video>
+      <div style="position:relative; width:100%; height:100%; overflow:hidden;">
+        <video autoplay muted loop playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover;">
+          <source src="Group18FULL_ASSEMBLY2.mp4" type="video/mp4">
+        </video>
+      </div>
       <div class="project-arrow">&#8599;</div>
       <div class="project-info">
         <p class="project-cat">CAD Design · 2025</p>
